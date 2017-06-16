@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Pop! Movies</string>
+    <string name="movie_title_test">Interstellar</string>
+    <string name="string_rating">Rating:</string>
+    <string name="rating_test">8/10</string>
+    <string name="number_of_ratings_test">Average of 1020 reviews</string>
+    <string name="movie_description_test">Guy sets out in search of new world to colonize and finds familial love???</string>
+
+    <string name="rating_string_out_of">/10</string>
+    <string name="movie_poster_342px_base_url">http://image.tmdb.org/t/p/w342/</string>
+    <string name="movie_poster_500px_base_url">http://image.tmdb.org/t/p/w500/</string>
+    <string name="intent_key_movie_details">MOVIE_DETAILS</string>
+    <string name="sort_movie_list_key">SORT_BY</string>
+
+    <!--Play trailers-->
+    <string name="string_play_trailers">Play trailer</string>
+    <string name="string_play_trailer_1">Play trailer 1</string>
+    <string name="string_play_trailer_2">Play trailer 2</string>
+    <string name="string_play_trailer_3">Play trailer 3</string>
+
+    <!--Menu-->
+    <string name="refresh">Refresh</string>
+    <string name="menu_title_sort_by_ratings">Sort by ratings</string>
+    <string name="menu_title_sort_by_popularity">Sort by Popularity</string>
+    <string name="string_read_reviews">read reviews</string>
+    <string name="content_description_movie_poster">Movie Poster</string>
+    <string name="movie_release_date_test">2017-05-30</string>
+    <string name="release_date_text">Release date:</string>
+
+</resources>
