@@ -47,16 +47,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        // TODO (2) add fav button
-
-        // TODO (3) make the description field collapsible
+        // TODO (1) add fav button
 
         moviePoster = (ImageView) findViewById(R.id.iv_details_screen_movie_poster);
         movieTitle = (TextView) findViewById(R.id.tv_details_screen_movie_title);
         movieRating = (TextView) findViewById(R.id.tv_movie_details_rating);
         movieReleaseDate = (TextView) findViewById(R.id.tv_movie_release_date);
         movieVoteCount = (TextView) findViewById(R.id.tv_movie_details_ratings_count);
-        //movieDescription = (TextView) findViewById(R.id.tv_details_screen_description);
+        movieDescription = (TextView) findViewById(R.id.tv_details_screen_description);
         //watchTrailer = (Button) findViewById(R.id.bt_watch_trailer);
         //readReviews = (Button) findViewById(R.id.bt_read_reviews);
 
@@ -75,7 +73,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
                 movieRating.setText(valueOf(movieItem.getRatings()) + getString(rating_string_out_of));
                 movieReleaseDate.setText(movieItem.getReleaseDate());
                 movieVoteCount.setText("Average of " + movieItem.getVoteCount() + " ratings");
-                //movieDescription.setText(movieItem.getDescription());
+                movieDescription.setText(movieItem.getDescription());
                 loadTrailers(movieItem.getMovieId());
                 loadReviews(movieItem.getMovieId());
 

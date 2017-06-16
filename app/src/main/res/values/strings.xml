@@ -4,7 +4,9 @@
     <string name="string_rating">Rating:</string>
     <string name="rating_test">8/10</string>
     <string name="number_of_ratings_test">Average of 1020 reviews</string>
-    <string name="movie_description_test">Guy sets out in search of new world to colonize and finds familial love???</string>
+    <string name="movie_description_test">Guy sets out in search of new world to colonize and finds familial love???\n
+        It presents an Refreshing take on the classic closed loop time travel scenario. Matthew McConaughey is simply brilliant.</string>
+    <font color="@color/colorPrimaryDark"><a href="support@legacystories.org">MORE</a></font>
 
     <string name="rating_string_out_of">/10</string>
     <string name="movie_poster_342px_base_url">http://image.tmdb.org/t/p/w342/</string>
