@@ -2,6 +2,7 @@ package com.alien.prashantrao.popmovies;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,6 +41,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
     private TextView movieTitle, movieRating, movieReleaseDate, movieVoteCount, movieDescription;
     private Button watchTrailer, readReviews;
 
+    private boolean isInDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +58,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        // TODO (1) add fav button
+        // TODO (1) receive FAVORITES info from MovieListActivity for user feedback
 
         moviePoster = (ImageView) findViewById(R.id.iv_details_screen_movie_poster);
         movieTitle = (TextView) findViewById(R.id.tv_details_screen_movie_title);
@@ -82,9 +85,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
                 movieReleaseDate.setText(movieItem.getReleaseDate());
                 movieVoteCount.setText("Average of " + movieItem.getVoteCount() + " ratings");
                 movieDescription.setText(movieItem.getDescription());
+
+                // load all the trailers and reviews
                 loadTrailers(movieItem.getMovieId());
                 loadReviews(movieItem.getMovieId());
 
+                // check if movie is already in favorite
+                isInDb = checkIfInFavorites(movieItem);
+                Log.i(TAG, "Is in favorites: " + Boolean.toString(isInDb));
             }
         }
 
@@ -100,25 +108,65 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
         new fetchReviews().execute(movieId);
     }
 
+    private boolean checkIfInFavorites(MovieItem item) {
+        Cursor cursor = getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI, null,
+                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = " + movieItem.getMovieId(),
+                null, null);
+        if (null != cursor && cursor.getCount() > 0) {
+            cursor.close();
+            return true;
+        } else {
+            if (null != cursor)
+                cursor.close();
+            return false;
+        }
+    }
+
     private void addFavorite(MovieItem item) {
 
-        //insert new movie data via a ContentResolver
-        ContentValues contentValues = new ContentValues();
-        // put the movie data into the ContentValues
-        contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, item.getMovieId());
-        contentValues.put(MovieContract.MovieEntry.COLUMN_TITLE, item.getTitle());
-        contentValues.put(MovieContract.MovieEntry.COLUMN_DESCRIPTION, item.getDescription());
-        contentValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, item.getReleaseDate());
-        contentValues.put(MovieContract.MovieEntry.COLUMN_POSTER, item.getPosterPath());
-        contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_AVG, item.getRatings());
-        contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_COUNT, item.getVoteCount());
+        // prevent duplicate entries
+        if (!isInDb) {
+            //insert new movie data via a ContentResolver
+            ContentValues contentValues = new ContentValues();
+            // put the movie data into the ContentValues
+            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, item.getMovieId());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_TITLE, item.getTitle());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_DESCRIPTION, item.getDescription());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, item.getReleaseDate());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_POSTER, item.getPosterPath());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_AVG, item.getRatings());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_COUNT, item.getVoteCount());
 
-        // insert the content values via a ContentResolver
-        Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
-        Log.v(TAG, uri.toString());
+            // insert the content values via a ContentResolver
+            Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
+            Log.v(TAG, uri.toString());
 
-        // show Toast for confirmation
-        Toast.makeText(this, R.string.string_added_to_favorites, Toast.LENGTH_SHORT).show();
+            // show Toast for confirmation
+            Toast.makeText(this, R.string.string_added_to_favorites, Toast.LENGTH_SHORT).show();
+            isInDb = true;
+        }
+    }
+
+    private void removeFavorite(MovieItem item) {
+        if (isInDb) {
+            // Build appropriate uri with String row id appended
+            Cursor cursor = getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI, null,
+                    MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = " + movieItem.getMovieId(),
+                    null, null);
+            cursor.moveToNext();
+            Uri uri = MovieContract.MovieEntry.CONTENT_URI;
+            uri = uri.buildUpon().
+                    appendPath(Integer.toString(cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry._ID))))
+                    .build();
+
+            Log.v(TAG, "uri for delete: " + uri.toString());
+            Log.v(TAG, "removing from id: " +
+                    cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry._ID)));
+            // delete the movie from favorites
+            getContentResolver().delete(uri, null, null);
+            isInDb = false;
+            cursor.close();
+        }
     }
 
     private class fetchTrailers extends AsyncTask<Long, Void, ArrayList<URL>> {
@@ -201,6 +249,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
         MenuItem item = menu.findItem(R.id.add_remove_favorite);
 
         // change the fav icon based on if the movie is a favorite
+        if (isInDb) {
+            item.setIcon(R.drawable.ic_favorite_white_24dp);
+        } else {
+            item.setIcon(R.drawable.ic_favorite_border_white_24dp);
+        }
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -215,7 +268,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
                 onBackPressed();
                 return true;
             case R.id.add_remove_favorite:
-                addFavorite(movieItem);
+                if (!isInDb) {
+                    addFavorite(movieItem);
+                    item.setIcon(R.drawable.ic_favorite_white_24dp);
+                } else {
+                    removeFavorite(movieItem);
+                    item.setIcon(R.drawable.ic_favorite_border_white_24dp);
+                }
                 break;
         }
 
