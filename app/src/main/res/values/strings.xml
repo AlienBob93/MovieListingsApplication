@@ -31,5 +31,6 @@
     <string name="string_add_to_favorites">Add to favorites</string>
     <string name="string_added_to_favorites">Movie Added to Favorites</string>
     <string name="log_message_failed_to_load_in_background">Failed to asynchronously load data.</string>
+    <string name="string_removed_from_favorites">Removed from favorites</string>
 
 </resources>

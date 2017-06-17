@@ -58,8 +58,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        // TODO (1) receive FAVORITES info from MovieListActivity for user feedback
-
         moviePoster = (ImageView) findViewById(R.id.iv_details_screen_movie_poster);
         movieTitle = (TextView) findViewById(R.id.tv_details_screen_movie_title);
         movieRating = (TextView) findViewById(R.id.tv_movie_details_rating);
@@ -150,22 +148,31 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
     private void removeFavorite(MovieItem item) {
         if (isInDb) {
             // Build appropriate uri with String row id appended
+
+            // get row id by querying the contentResolver
             Cursor cursor = getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI, null,
                     MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = " + movieItem.getMovieId(),
                     null, null);
-            cursor.moveToNext();
-            Uri uri = MovieContract.MovieEntry.CONTENT_URI;
-            uri = uri.buildUpon().
-                    appendPath(Integer.toString(cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry._ID))))
-                    .build();
+            if (null != cursor) {
+                // move the cursor to the correct position
+                cursor.moveToNext();
+                Uri uri = MovieContract.MovieEntry.CONTENT_URI;
+                uri = uri.buildUpon().
+                        appendPath(Integer.toString(cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry._ID))))
+                        .build();
 
-            Log.v(TAG, "uri for delete: " + uri.toString());
-            Log.v(TAG, "removing from id: " +
-                    cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry._ID)));
-            // delete the movie from favorites
-            getContentResolver().delete(uri, null, null);
-            isInDb = false;
-            cursor.close();
+                Log.v(TAG, "uri for delete: " + uri.toString());
+                Log.v(TAG, "removing from id: " +
+                        cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry._ID)));
+                // delete the movie from favorites
+                getContentResolver().delete(uri, null, null);
+
+                // show Toast for confirmation
+                Toast.makeText(this, R.string.string_removed_from_favorites, Toast.LENGTH_SHORT).show();
+                isInDb = false;
+                // close the cursor
+                cursor.close();
+            }
         }
     }
 
@@ -258,15 +265,16 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
         return super.onPrepareOptionsMenu(menu);
     }
 
-    // set the correct actionBar back button properties
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         switch (id) {
+            // set the correct actionBar back button properties
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            // set the favorite icon and action to reflect the context
             case R.id.add_remove_favorite:
                 if (!isInDb) {
                     addFavorite(movieItem);
