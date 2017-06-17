@@ -29,6 +29,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MovieListActivity"/>
         </activity>
+
+        <!--register the content provider-->
+        <provider
+            android:name="com.alien.prashantrao.popmovies.Data.MovieContentProvider"
+            android:authorities="com.alien.prashantrao.popmovies"
+            android:exported="false"/>
     </application>
 
 </manifest>

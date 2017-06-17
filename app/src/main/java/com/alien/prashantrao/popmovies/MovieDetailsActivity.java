@@ -1,17 +1,24 @@
 package com.alien.prashantrao.popmovies;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alien.prashantrao.popmovies.Data.MovieContract;
 import com.alien.prashantrao.popmovies.utilities.JsonUtils;
 import com.alien.prashantrao.popmovies.utilities.MovieItem;
 import com.alien.prashantrao.popmovies.utilities.NetworkUtils;
@@ -25,6 +32,7 @@ import static java.lang.String.valueOf;
 
 public class MovieDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "MovieDetailsActivity";
     private MovieItem movieItem;
     private ArrayList<URL> trailerUrls, reviewUrls;
 
@@ -90,6 +98,27 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
 
     private void loadReviews(long movieId) {
         new fetchReviews().execute(movieId);
+    }
+
+    private void addFavorite(MovieItem item) {
+
+        //insert new movie data via a ContentResolver
+        ContentValues contentValues = new ContentValues();
+        // put the movie data into the ContentValues
+        contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, item.getMovieId());
+        contentValues.put(MovieContract.MovieEntry.COLUMN_TITLE, item.getTitle());
+        contentValues.put(MovieContract.MovieEntry.COLUMN_DESCRIPTION, item.getDescription());
+        contentValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, item.getReleaseDate());
+        contentValues.put(MovieContract.MovieEntry.COLUMN_POSTER, item.getPosterPath());
+        contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_AVG, item.getRatings());
+        contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_COUNT, item.getVoteCount());
+
+        // insert the content values via a ContentResolver
+        Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
+        Log.v(TAG, uri.toString());
+
+        // show Toast for confirmation
+        Toast.makeText(this, R.string.string_added_to_favorites, Toast.LENGTH_SHORT).show();
     }
 
     private class fetchTrailers extends AsyncTask<Long, Void, ArrayList<URL>> {
@@ -159,14 +188,37 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
         }*/
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.details_screen_add_favorite, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.add_remove_favorite);
+
+        // change the fav icon based on if the movie is a favorite
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     // set the correct actionBar back button properties
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-            onBackPressed();
-            return true;
+
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.add_remove_favorite:
+                addFavorite(movieItem);
+                break;
         }
+
         return super.onOptionsItemSelected(item);
     }
 }
