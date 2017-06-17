@@ -62,7 +62,10 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Popu
         MovieItem movie = mMovieList.get(position);
 
         holder.movie_title.setText(movie.getTitle());
-        Picasso.with(context).load("http://image.tmdb.org/t/p/w342/"+movie.getPosterPath()).into(holder.movie_poster);
+        // can resize to --> 185 x 275
+        Picasso.with(context)
+                .load(context.getString(R.string.movie_poster_342px_base_url) + movie.getPosterPath())
+                .placeholder(R.drawable.ic_local_movies_black_48dp).into(holder.movie_poster);
     }
 
     @Override

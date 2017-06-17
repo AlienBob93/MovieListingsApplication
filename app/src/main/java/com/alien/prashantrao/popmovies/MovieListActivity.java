@@ -93,10 +93,9 @@ public class MovieListActivity extends AppCompatActivity
 
             try {
                 String JsonResponse = NetworkUtils.getResponseFromHttpUrl(requestPopularMoviesUrl);
-                ArrayList<MovieItem> movieListJsonData = JsonUtils
-                        .getPopularMoviesListFromJson(MovieListActivity.this, JsonResponse);
 
-                return movieListJsonData;
+                return JsonUtils
+                        .getPopularMoviesListFromJson(MovieListActivity.this, JsonResponse);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;

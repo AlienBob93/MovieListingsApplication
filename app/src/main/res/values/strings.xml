@@ -9,6 +9,7 @@
     <font color="@color/colorPrimaryDark"><a href="support@legacystories.org">MORE</a></font>
 
     <string name="rating_string_out_of">/10</string>
+    <string name="movie_poster_185px_base_url">http://image.tmdb.org/t/p/w185/</string>
     <string name="movie_poster_342px_base_url">http://image.tmdb.org/t/p/w342/</string>
     <string name="movie_poster_500px_base_url">http://image.tmdb.org/t/p/w500/</string>
     <string name="intent_key_movie_details">MOVIE_DETAILS</string>

@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alien.prashantrao.popmovies.Data.MovieContract;
 import com.alien.prashantrao.popmovies.utilities.JsonUtils;
 import com.alien.prashantrao.popmovies.utilities.MovieItem;
 import com.alien.prashantrao.popmovies.utilities.NetworkUtils;
@@ -28,6 +27,7 @@ import com.squareup.picasso.Picasso;
 import java.net.URL;
 import java.util.ArrayList;
 
+import static com.alien.prashantrao.popmovies.Data.MovieContract.MovieEntry;
 import static com.alien.prashantrao.popmovies.R.string.rating_string_out_of;
 import static java.lang.String.valueOf;
 
@@ -75,8 +75,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
                 movieItem = intentThatStartedThisActivity.getParcelableExtra(getString(R.string.intent_key_movie_details));
 
                 // set the views
-                Picasso.with(this).load(getString(R.string.movie_poster_500px_base_url)
-                        + movieItem.getPosterPath()).into(moviePoster);
+                Picasso.with(this).load(getString(R.string.movie_poster_342px_base_url)
+                        + movieItem.getPosterPath()).resize(500, 743)
+                        .placeholder(R.drawable.ic_local_movies_black_48dp).into(moviePoster);
 
                 movieTitle.setText(movieItem.getTitle());
                 movieRating.setText(valueOf(movieItem.getRatings()) + getString(rating_string_out_of));
@@ -107,8 +108,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
     }
 
     private boolean checkIfInFavorites(MovieItem item) {
-        Cursor cursor = getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI, null,
-                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = " + movieItem.getMovieId(),
+        Cursor cursor = getContentResolver().query(MovieEntry.CONTENT_URI, null,
+                MovieEntry.COLUMN_MOVIE_ID + " = " + movieItem.getMovieId(),
                 null, null);
         if (null != cursor && cursor.getCount() > 0) {
             cursor.close();
@@ -127,16 +128,16 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
             //insert new movie data via a ContentResolver
             ContentValues contentValues = new ContentValues();
             // put the movie data into the ContentValues
-            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, item.getMovieId());
-            contentValues.put(MovieContract.MovieEntry.COLUMN_TITLE, item.getTitle());
-            contentValues.put(MovieContract.MovieEntry.COLUMN_DESCRIPTION, item.getDescription());
-            contentValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, item.getReleaseDate());
-            contentValues.put(MovieContract.MovieEntry.COLUMN_POSTER, item.getPosterPath());
-            contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_AVG, item.getRatings());
-            contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_COUNT, item.getVoteCount());
+            contentValues.put(MovieEntry.COLUMN_MOVIE_ID, item.getMovieId());
+            contentValues.put(MovieEntry.COLUMN_TITLE, item.getTitle());
+            contentValues.put(MovieEntry.COLUMN_DESCRIPTION, item.getDescription());
+            contentValues.put(MovieEntry.COLUMN_RELEASE_DATE, item.getReleaseDate());
+            contentValues.put(MovieEntry.COLUMN_POSTER, item.getPosterPath());
+            contentValues.put(MovieEntry.COLUMN_VOTE_AVG, item.getRatings());
+            contentValues.put(MovieEntry.COLUMN_VOTE_COUNT, item.getVoteCount());
 
             // insert the content values via a ContentResolver
-            Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
+            Uri uri = getContentResolver().insert(MovieEntry.CONTENT_URI, contentValues);
             Log.v(TAG, uri.toString());
 
             // show Toast for confirmation
@@ -150,20 +151,20 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
             // Build appropriate uri with String row id appended
 
             // get row id by querying the contentResolver
-            Cursor cursor = getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI, null,
-                    MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = " + movieItem.getMovieId(),
+            Cursor cursor = getContentResolver().query(MovieEntry.CONTENT_URI, null,
+                    MovieEntry.COLUMN_MOVIE_ID + " = " + movieItem.getMovieId(),
                     null, null);
             if (null != cursor) {
                 // move the cursor to the correct position
                 cursor.moveToNext();
-                Uri uri = MovieContract.MovieEntry.CONTENT_URI;
+                Uri uri = MovieEntry.CONTENT_URI;
                 uri = uri.buildUpon().
-                        appendPath(Integer.toString(cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry._ID))))
+                        appendPath(Integer.toString(cursor.getInt(cursor.getColumnIndex(MovieEntry._ID))))
                         .build();
 
                 Log.v(TAG, "uri for delete: " + uri.toString());
                 Log.v(TAG, "removing from id: " +
-                        cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry._ID)));
+                        cursor.getInt(cursor.getColumnIndex(MovieEntry._ID)));
                 // delete the movie from favorites
                 getContentResolver().delete(uri, null, null);
 
