@@ -31,8 +31,8 @@
                     android:layout_marginStart="@dimen/padding_start_end"
                     android:layout_marginEnd="@dimen/padding_start_end"
                     android:layout_marginTop="@dimen/padding_top_16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="@dimen/padding_start_end"
+                    android:layout_marginLeft="@dimen/padding_start_end"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" />

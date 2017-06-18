@@ -14,6 +14,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.alien.prashantrao.popmovies.utilities.MovieItem;
 
@@ -65,8 +66,16 @@ public class FavoritesActivity extends AppCompatActivity
          getSupportLoaderManager().initLoader(ID_FAVORITES_LOADER, null, this);
     }
 
+    // show the data
     private void showFavoritesView() {
+        findViewById(R.id.add_favorites_prompt).setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
 
+    // show a prompt to add favorites
+    private void showAddFavoritesPromptImage() {
+        findViewById(R.id.add_favorites_prompt).setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.INVISIBLE);
     }
 
     // force landscape layout on orientation change
@@ -105,6 +114,8 @@ public class FavoritesActivity extends AppCompatActivity
         mRecyclerView.smoothScrollToPosition(mPosition);
         if (data.getCount() != 0) {
             showFavoritesView();
+        } else {
+            showAddFavoritesPromptImage();
         }
     }
 

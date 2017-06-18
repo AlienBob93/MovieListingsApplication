@@ -2,13 +2,18 @@
 <resources>
     <dimen name="padding_start_end">16dp</dimen>
     <dimen name="padding_top_16dp">16dp</dimen>
-    <dimen name="drawable_padding">8dp</dimen>
     <dimen name="padding_start_end_8dp">8dp</dimen>
-    <dimen name="padding_top_8dp">8dp</dimen>
     <dimen name="margins_42dp">42dp</dimen>
+    <dimen name="padding_sort_menu">16dp</dimen>
+
+    <dimen name="drawable_padding">8dp</dimen>
     <dimen name="text_size_22sp">22sp</dimen>
-    <dimen name="loading_indicator_size">42dp</dimen>
     <dimen name="text_size_small_16sp">16sp</dimen>
     <dimen name="text_size_large_42sp">42sp</dimen>
-    <dimen name="padding_sort_menu">16dp</dimen>
+
+    <dimen name="loading_indicator_size">42dp</dimen>
+    <dimen name="activity_background_image_size">64dp</dimen>
+
+    <dimen name="bottom_sheet_item_height">60dp</dimen>
+    <dimen name="movie_list_item_height">280dp</dimen>
 </resources>

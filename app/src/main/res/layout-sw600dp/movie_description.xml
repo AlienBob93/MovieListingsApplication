@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.alien.prashantrao.popmovies.customViews.ExpandableTextView
+        android:id="@+id/tv_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_22sp"
+        android:fontFamily="sans-serif"
+        android:layout_marginStart="@dimen/margins_42dp"
+        android:layout_marginEnd="@dimen/margins_42dp"
+        android:layout_marginLeft="@dimen/margins_42dp"
+        android:layout_marginRight="@dimen/margins_42dp"
+        tools:text="This thing just goes on and on and on and on and oon and on and on and on and on and on and on and on and on and on and oon and on and on and on and on and on on and on and on and on and oon and on and on and on and on and on and on and on and on and on and oon and on and on and on and on and on..."/>
+
+</LinearLayout>
+</layout>

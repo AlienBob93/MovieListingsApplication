@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +30,6 @@ public class MovieListActivity extends AppCompatActivity
     public static MovieListAdapter mMovieListAdapter;
     public ProgressBar loadingIndicator;
     private BottomSheetDialog mBottomSheetDialog;
-    private View sheetView;
 
     public static final int SORT_POPULAR = 1;
     public static final int SORT_TOP_RATED = 2;
@@ -60,11 +58,12 @@ public class MovieListActivity extends AppCompatActivity
         mRecyclerView.setAdapter(mMovieListAdapter);
 
         // get the sort order last used by the user
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        final SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         mSortType = sharedPref.getInt(getString(R.string.sort_movie_list_key), SORT_POPULAR);
 
         mBottomSheetDialog = new BottomSheetDialog(MovieListActivity.this);
-        sheetView = MovieListActivity.this.getLayoutInflater().inflate(R.layout.sort_menu, null);
+        final View sheetView = MovieListActivity.this.getLayoutInflater().inflate(R.layout.sort_menu, null);
+        setSortMenuItemHiglight(sheetView, mSortType);
 
         /* sort the list based on the user preference and save them to the sharedPreferences
          * file
@@ -74,11 +73,7 @@ public class MovieListActivity extends AppCompatActivity
             public void onClick(View v) {
                 mSortType = SORT_POPULAR;
                 SharedPreferences sharedPreferences = MovieListActivity.this.getPreferences(Context.MODE_PRIVATE);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    v.setBackgroundColor(getColor(R.color.colorAccent));
-                } else {
-                    v.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                }
+                setSortMenuItemHiglight(sheetView, mSortType);
                 sharedPreferences.edit().putInt(getString(R.string.sort_movie_list_key), mSortType).apply();
                 loadMovieData(mSortType);
             }
@@ -89,11 +84,7 @@ public class MovieListActivity extends AppCompatActivity
             public void onClick(View v) {
                 mSortType = SORT_TOP_RATED;
                 SharedPreferences sharedPreferences = MovieListActivity.this.getPreferences(Context.MODE_PRIVATE);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    v.setBackgroundColor(getColor(R.color.colorAccent));
-                } else {
-                    v.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                }
+                setSortMenuItemHiglight(sheetView, mSortType);
                 sharedPreferences.edit().putInt(getString(R.string.sort_movie_list_key), mSortType).apply();
                 loadMovieData(mSortType);
             }
@@ -126,6 +117,16 @@ public class MovieListActivity extends AppCompatActivity
 
     private void showSortMenu() {
         mBottomSheetDialog.show();
+    }
+
+    private void setSortMenuItemHiglight(View v, int sortOrder) {
+        if (sortOrder == SORT_POPULAR) {
+            v.findViewById(R.id.iv_sort_popular).setBackgroundResource(R.drawable.ic_check_teal_500_24dp);
+            v.findViewById(R.id.iv_sort_top_rated).setBackgroundResource(R.drawable.ic_sort_black_24dp);
+        } else if (sortOrder == SORT_TOP_RATED) {
+            v.findViewById(R.id.iv_sort_popular).setBackgroundResource(R.drawable.ic_sort_black_24dp);
+            v.findViewById(R.id.iv_sort_top_rated).setBackgroundResource(R.drawable.ic_check_teal_500_24dp);
+        }
     }
 
     public void showLoadingIndicator() {

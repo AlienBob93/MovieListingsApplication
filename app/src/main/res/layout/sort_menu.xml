@@ -11,7 +11,7 @@
     <LinearLayout
         android:id="@+id/sort_popular"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/bottom_sheet_item_height"
         android:orientation="horizontal"
         android:clickable="true"
         android:focusable="true"
@@ -22,7 +22,7 @@
             android:id="@+id/iv_sort_popular"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:srcCompat="@drawable/ic_sort_black_24dp"
+            android:background="@drawable/ic_sort_black_24dp"
             android:contentDescription="@string/content_description_show_popular" />
         <TextView
             android:id="@+id/tv_sort_popular"
@@ -39,7 +39,7 @@
     <LinearLayout
         android:id="@+id/sort_top_rated"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/bottom_sheet_item_height"
         android:orientation="horizontal"
         android:clickable="true"
         android:focusable="true"
@@ -50,7 +50,7 @@
             android:id="@+id/iv_sort_top_rated"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:srcCompat="@drawable/ic_sort_black_24dp"
+            android:background="@drawable/ic_sort_black_24dp"
             android:contentDescription="@string/content_description_show_top_rated" />
         <TextView
             android:id="@+id/tv_sort_top_rated"
@@ -67,7 +67,7 @@
     <LinearLayout
         android:id="@+id/sort_favorites"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/bottom_sheet_item_height"
         android:orientation="horizontal"
         android:clickable="true"
         android:focusable="true"

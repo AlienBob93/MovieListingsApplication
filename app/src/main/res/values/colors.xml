@@ -6,4 +6,5 @@
 
     <color name="white">#FFFFFF</color>
     <color name="title_background">#644d4d4d</color>
+    <color name="activity_background_text_color">#50424242</color>
 </resources>

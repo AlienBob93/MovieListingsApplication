@@ -179,23 +179,29 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
 
         // set the list text
         ArrayList<String> numberedUrlArray = new ArrayList<>();
-        for (int i = 0; i < urls.size(); i++) {
-            numberedUrlArray.add(generalTextForListItems + Integer.toString(i+1));
+        if (urls.size() != 0) {
+            for (int i = 0; i < urls.size(); i++) {
+                numberedUrlArray.add(generalTextForListItems + Integer.toString(i + 1));
+            }
+        } else {
+            // if the passed arrayList is empty then show a default message
+            numberedUrlArray.add("Nothing to see here \uD83D\uDE10");
         }
-
         // set the adapter for the bottomSheet
         assert bottomSheetFragment != null;
         bottomSheetFragment.setAdapter(new ArrayAdapter<>(MovieDetailsActivity.this,
                 android.R.layout.simple_list_item_1, numberedUrlArray.toArray()));
 
-        // set the on click method for the list items
-        bottomSheetFragment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urls.get(position).toString()));
-                startActivity(browserIntent);
-            }
-        });
+        if (urls.size() != 0) {
+            // set the on click method for the list items
+            bottomSheetFragment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urls.get(position).toString()));
+                    startActivity(browserIntent);
+                }
+            });
+        }
 
         // show the bottom sheet
         dialog.show();

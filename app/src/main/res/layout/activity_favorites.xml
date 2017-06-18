@@ -14,8 +14,38 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:numColumns="auto_fit"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:visibility="invisible">
 
     </android.support.v7.widget.RecyclerView>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/add_favorites_prompt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="@dimen/activity_background_image_size"
+            android:layout_height="@dimen/activity_background_image_size"
+            app:srcCompat="@drawable/ic_favorite_red_100_48dp"
+            android:contentDescription="@string/content_description_go_like_some_movies"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:id="@+id/imageView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/content_description_go_like_some_movies"
+            android:fontFamily="sans-serif"
+            android:textSize="@dimen/text_size_22sp"
+            android:textColor="@color/activity_background_text_color"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.design.widget.CoordinatorLayout>

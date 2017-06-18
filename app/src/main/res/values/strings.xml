@@ -40,4 +40,5 @@
     <string name="rating_test">8/10</string>
     <string name="number_of_ratings_test">Average of 1020 reviews</string>
     <string name="movie_release_date_test">2017-05-30</string>
+    <string name="content_description_go_like_some_movies">Go like some movies!</string>
 </resources>
