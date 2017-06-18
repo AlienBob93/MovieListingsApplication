@@ -1,29 +1,31 @@
-<android.support.design.widget.AppBarLayout android:id="@+id/appBar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+<layout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <!-- Toolbar is the actual app bar with text and the action items -->
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <android.support.design.widget.AppBarLayout android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:layout_scrollFlags="scroll|enterAlways">
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <TextView
-            android:id="@+id/toolbar_title"
+        <!-- Toolbar is the actual app bar with text and the action items -->
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center_vertical"
-            android:text="@string/app_name"
-            android:textColor="@color/white"
-            android:textSize="22sp" />
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_scrollFlags="scroll|enterAlways">
 
-    </android.support.v7.widget.Toolbar>
-</android.support.design.widget.AppBarLayout>
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center_vertical"
+                android:text="@string/app_name"
+                android:textColor="@color/white"
+                android:textSize="22sp" />
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+</layout>

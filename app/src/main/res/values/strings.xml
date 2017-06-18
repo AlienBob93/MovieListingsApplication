@@ -16,7 +16,7 @@
     <string name="sort_movie_list_key">SORT_BY</string>
 
     <!--Play trailers-->
-    <string name="string_play_trailers">Play trailer</string>
+    <string name="string_play_trailers">Watch trailers</string>
     <string name="string_play_trailer_1">Play trailer 1</string>
     <string name="string_play_trailer_2">Play trailer 2</string>
     <string name="string_play_trailer_3">Play trailer 3</string>

@@ -3,25 +3,27 @@ package com.alien.prashantrao.popmovies;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.alien.prashantrao.popmovies.databinding.ActivityMovieDetailsBinding;
 import com.alien.prashantrao.popmovies.utilities.JsonUtils;
 import com.alien.prashantrao.popmovies.utilities.MovieItem;
 import com.alien.prashantrao.popmovies.utilities.NetworkUtils;
+import com.alien.prashantrao.popmovies.customViews.TrailersAndReviewsBottomSheetFragment;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
@@ -34,12 +36,10 @@ import static java.lang.String.valueOf;
 public class MovieDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MovieDetailsActivity";
+
+    private ActivityMovieDetailsBinding mBinding;
     private MovieItem movieItem;
     private ArrayList<URL> trailerUrls, reviewUrls;
-
-    private ImageView moviePoster;
-    private TextView movieTitle, movieRating, movieReleaseDate, movieVoteCount, movieDescription;
-    private Button watchTrailer, readReviews;
 
     private boolean isInDb;
 
@@ -48,24 +48,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
+        // set content view using DataBindingUtil
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_movie_details);
+
         // Find the toolbar view inside the activity layout
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        this.setSupportActionBar(mBinding.movieDetailsActionBar.toolbar);
 
         // set the actionBar back button
         ActionBar actionBar = this.getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        moviePoster = (ImageView) findViewById(R.id.iv_details_screen_movie_poster);
-        movieTitle = (TextView) findViewById(R.id.tv_details_screen_movie_title);
-        movieRating = (TextView) findViewById(R.id.tv_movie_details_rating);
-        movieReleaseDate = (TextView) findViewById(R.id.tv_movie_release_date);
-        movieVoteCount = (TextView) findViewById(R.id.tv_movie_details_ratings_count);
-        movieDescription = (TextView) findViewById(R.id.tv_details_screen_description);
-        //watchTrailer = (Button) findViewById(R.id.bt_watch_trailer);
-        //readReviews = (Button) findViewById(R.id.bt_read_reviews);
 
         Intent intentThatStartedThisActivity = getIntent();
 
@@ -77,13 +70,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
                 // set the views
                 Picasso.with(this).load(getString(R.string.movie_poster_342px_base_url)
                         + movieItem.getPosterPath()).resize(500, 743)
-                        .placeholder(R.drawable.ic_local_movies_black_48dp).into(moviePoster);
+                        .placeholder(R.drawable.ic_local_movies_black_48dp).into(mBinding.movieDetailsPosterTitle.ivDetailsScreenMoviePoster);
 
-                movieTitle.setText(movieItem.getTitle());
-                movieRating.setText(valueOf(movieItem.getRatings()) + getString(rating_string_out_of));
-                movieReleaseDate.setText(movieItem.getReleaseDate());
-                movieVoteCount.setText("Average of " + movieItem.getVoteCount() + " ratings");
-                movieDescription.setText(movieItem.getDescription());
+                mBinding.movieDetailsPosterTitle.tvDetailsScreenMovieTitle.setText(movieItem.getTitle());
+                mBinding.movieDetailsPosterTitle.tvMovieDetailsRating.setText(valueOf(movieItem.getRatings()) + getString(rating_string_out_of));
+                mBinding.movieDetailsPosterTitle.tvMovieReleaseDate.setText(movieItem.getReleaseDate());
+                mBinding.movieDetailsPosterTitle.tvMovieDetailsRatingsCount.setText("Average of " + movieItem.getVoteCount() + " ratings");
+                mBinding.tvDetailsScreenDescription.tvDescription.setText(movieItem.getDescription());
 
                 // load all the trailers and reviews
                 loadTrailers(movieItem.getMovieId());
@@ -95,8 +88,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
             }
         }
 
-        //watchTrailer.setOnClickListener(this);
-        //readReviews.setOnClickListener(this);
+        // set the onClickListeners
+        mBinding.trailerReviewButtons.btWatchTrailers.setOnClickListener(this);
+        mBinding.trailerReviewButtons.btReadReviews.setOnClickListener(this);
     }
 
     private void loadTrailers(long movieId) {
@@ -122,7 +116,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void addFavorite(MovieItem item) {
-
         // prevent duplicate entries
         if (!isInDb) {
             //insert new movie data via a ContentResolver
@@ -138,7 +131,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
 
             // insert the content values via a ContentResolver
             Uri uri = getContentResolver().insert(MovieEntry.CONTENT_URI, contentValues);
-            Log.v(TAG, uri.toString());
+            //Log.v(TAG, uri.toString());
 
             // show Toast for confirmation
             Toast.makeText(this, R.string.string_added_to_favorites, Toast.LENGTH_SHORT).show();
@@ -148,8 +141,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
 
     private void removeFavorite(MovieItem item) {
         if (isInDb) {
-            // Build appropriate uri with String row id appended
-
             // get row id by querying the contentResolver
             Cursor cursor = getContentResolver().query(MovieEntry.CONTENT_URI, null,
                     MovieEntry.COLUMN_MOVIE_ID + " = " + movieItem.getMovieId(),
@@ -157,6 +148,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
             if (null != cursor) {
                 // move the cursor to the correct position
                 cursor.moveToNext();
+
+                // Build appropriate uri with String row id appended
                 Uri uri = MovieEntry.CONTENT_URI;
                 uri = uri.buildUpon().
                         appendPath(Integer.toString(cursor.getInt(cursor.getColumnIndex(MovieEntry._ID))))
@@ -175,6 +168,38 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
                 cursor.close();
             }
         }
+    }
+
+    private void callBottomSheetFragment(final ArrayList<URL> urls, String generalTextForListItems) {
+        // create the Bottom Sheet dialog
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.setContentView(R.layout.trailers_reviews_bottom_sheet);
+        TrailersAndReviewsBottomSheetFragment bottomSheetFragment =
+                (TrailersAndReviewsBottomSheetFragment) dialog.findViewById(R.id.trailers_reviews_sheet);
+
+        // set the list text
+        ArrayList<String> numberedUrlArray = new ArrayList<>();
+        for (int i = 0; i < urls.size(); i++) {
+            numberedUrlArray.add(generalTextForListItems + Integer.toString(i+1));
+        }
+
+        // set the adapter for the bottomSheet
+        assert bottomSheetFragment != null;
+        bottomSheetFragment.setAdapter(new ArrayAdapter<>(MovieDetailsActivity.this,
+                android.R.layout.simple_list_item_1, numberedUrlArray.toArray()));
+
+        // set the on click method for the list items
+        bottomSheetFragment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urls.get(position).toString()));
+                startActivity(browserIntent);
+            }
+        });
+
+        // show the bottom sheet
+        dialog.show();
+        numberedUrlArray.clear();
     }
 
     private class fetchTrailers extends AsyncTask<Long, Void, ArrayList<URL>> {
@@ -224,24 +249,22 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         int id = v.getId();
 
-        /*switch (id) {
-            case R.id.bt_watch_trailer:
+        switch (id) {
+            case R.id.bt_watch_trailers:
                 if (null != trailerUrls) {
-                    Intent streamVideoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(trailerUrls.get(0).toString()));
-                    startActivity(streamVideoIntent);
+                    callBottomSheetFragment(trailerUrls, "Watch trailer ");
                 } else {
                     Toast.makeText(this, "There seems to be something wrong. :(", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.bt_read_reviews:
                 if (null != reviewUrls) {
-                    Intent streamVideoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(reviewUrls.get(0).toString()));
-                    startActivity(streamVideoIntent);
+                    callBottomSheetFragment(reviewUrls, "Read review ");
                 } else {
                     Toast.makeText(this, "No reviews found.", Toast.LENGTH_SHORT).show();
                 }
                 break;
-        }*/
+        }
     }
 
     @Override

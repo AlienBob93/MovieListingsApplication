@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -22,11 +21,9 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.alien.prashantrao.popmovies.Data.MovieContract;
-import com.alien.prashantrao.popmovies.utilities.JsonUtils;
 import com.alien.prashantrao.popmovies.utilities.MovieItem;
-import com.alien.prashantrao.popmovies.utilities.NetworkUtils;
+import com.alien.prashantrao.popmovies.utilities.fetchPopularMoviesTask;
 
-import java.net.URL;
 import java.util.ArrayList;
 
 public class MovieListActivity extends AppCompatActivity
@@ -36,8 +33,8 @@ public class MovieListActivity extends AppCompatActivity
     private static final String TAG = "MovieListActivity";
 
     private RecyclerView mRecyclerView;
-    private MovieListAdapter mMovieListAdapter;
-    private ProgressBar loadingIndicator;
+    public static MovieListAdapter mMovieListAdapter;
+    public ProgressBar loadingIndicator;
 
     public static final int SORT_POPULAR = 1;
     public static final int SORT_TOP_RATED = 2;
@@ -73,45 +70,21 @@ public class MovieListActivity extends AppCompatActivity
 
     // start the asyncTask to fetch the appropriately sorted movies list
     private void loadMovieData(int args) {
-        new fetchPopularMoviesTask().execute(args);
+        showLoadingIndicator();
+        new fetchPopularMoviesTask(this).execute(args);
+        hideLoadingIndicator();
     }
 
-    // Background task to fetch the movies from the web API
-    private class fetchPopularMoviesTask extends AsyncTask<Integer, Void, ArrayList<MovieItem>> {
+    public void showLoadingIndicator() {
+        loadingIndicator.setVisibility(View.VISIBLE);
+    }
 
-        @Override
-        protected void onPreExecute() {
-            // show the loading indicator while the list is being fetched
-            loadingIndicator.setVisibility(View.VISIBLE);
-        }
+    public void hideLoadingIndicator() {
+        loadingIndicator.setVisibility(View.GONE);
+    }
 
-        @Override
-        protected ArrayList<MovieItem> doInBackground(Integer... params) {
-
-            // query the URL and parse the returned JSON object
-            URL requestPopularMoviesUrl = NetworkUtils.buildUrlForJson(params[0]);
-
-            try {
-                String JsonResponse = NetworkUtils.getResponseFromHttpUrl(requestPopularMoviesUrl);
-
-                return JsonUtils
-                        .getPopularMoviesListFromJson(MovieListActivity.this, JsonResponse);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<MovieItem> movieItems) {
-            /* if the returned list is not empty (if the retrieval was successful)
-             * hide the loading indicator and show the list
-             */
-            if (movieItems != null) {
-                loadingIndicator.setVisibility(View.INVISIBLE);
-                mMovieListAdapter.setMovies(movieItems);
-            }
-        }
+    public static void setMovieListAdapter(ArrayList<MovieItem> movieItems) {
+        mMovieListAdapter.setMovies(movieItems);
     }
 
     @Override

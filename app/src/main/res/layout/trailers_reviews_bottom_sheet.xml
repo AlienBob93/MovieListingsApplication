@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.alien.prashantrao.popmovies.customViews.TrailersAndReviewsBottomSheetFragment
+        android:id="@+id/trailers_reviews_sheet"
+        android:divider="@color/colorPrimary"
+        android:dividerHeight="1dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margins_42dp"
+        android:layout_marginRight="@dimen/margins_42dp">
+
+    </com.alien.prashantrao.popmovies.customViews.TrailersAndReviewsBottomSheetFragment>
+
+</LinearLayout>
