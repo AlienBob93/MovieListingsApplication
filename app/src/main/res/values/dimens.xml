@@ -6,4 +6,8 @@
     <dimen name="padding_start_end_8dp">8dp</dimen>
     <dimen name="padding_top_8dp">8dp</dimen>
     <dimen name="margins_42dp">42dp</dimen>
+    <dimen name="text_size_22sp">22sp</dimen>
+    <dimen name="loading_indicator_size">42dp</dimen>
+    <dimen name="text_size_small_16sp">16sp</dimen>
+    <dimen name="text_size_large_42sp">42sp</dimen>
 </resources>
