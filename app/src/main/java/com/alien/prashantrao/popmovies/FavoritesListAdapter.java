@@ -63,18 +63,9 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
     @Override
     public void onBindViewHolder(FavoriteMovieViewHolder holder, int position) {
         // indices for the favorite movies columns _id, title and poster
-        // TODO (1) define these publicly is their use is not limited to this function
         int idIndex = mCursor.getColumnIndex(MovieEntry._ID);
         int titleIndex = mCursor.getColumnIndex(MovieEntry.COLUMN_TITLE);
         int posterIndex = mCursor.getColumnIndex(MovieEntry.COLUMN_POSTER);
-
-        /*
-        int movieIdIndex = mCursor.getColumnIndex(MovieEntry.COLUMN_MOVIE_ID);
-        int descriptionIndex = mCursor.getColumnIndex(MovieEntry.COLUMN_DESCRIPTION);
-        int releaseDateIndex = mCursor.getColumnIndex(MovieEntry.COLUMN_RELEASE_DATE);
-        int voteAvgIndex = mCursor.getColumnIndex(MovieEntry.COLUMN_VOTE_AVG);
-        int voteCountIndex = mCursor.getColumnIndex(MovieEntry.COLUMN_VOTE_COUNT);
-        */
 
         // move to the correct position in the cursor
         mCursor.moveToPosition(position);

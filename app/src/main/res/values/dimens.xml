@@ -10,4 +10,5 @@
     <dimen name="loading_indicator_size">42dp</dimen>
     <dimen name="text_size_small_16sp">16sp</dimen>
     <dimen name="text_size_large_42sp">42sp</dimen>
+    <dimen name="padding_sort_menu">16dp</dimen>
 </resources>

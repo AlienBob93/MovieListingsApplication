@@ -11,30 +11,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".MovieListActivity"
             android:configChanges="orientation"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MovieDetailsActivity"
             android:parentActivityName=".MovieListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MovieListActivity"/>
+                android:value=".MovieListActivity" />
         </activity>
 
-        <!--register the content provider-->
+        <!-- register the content provider -->
         <provider
-            android:name="com.alien.prashantrao.popmovies.Data.MovieContentProvider"
+            android:name=".Data.MovieContentProvider"
             android:authorities="com.alien.prashantrao.popmovies"
-            android:exported="false"/>
+            android:exported="false" />
+
+        <activity
+            android:name=".FavoritesActivity"
+            android:parentActivityName=".MovieListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MovieListActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -1,37 +1,43 @@
 <resources>
     <string name="app_name">Pop! Movies</string>
-    <string name="movie_title_test">Interstellar</string>
-    <string name="string_rating">Rating:</string>
-    <string name="rating_test">8/10</string>
-    <string name="number_of_ratings_test">Average of 1020 reviews</string>
-    <string name="movie_description_test">Guy sets out in search of new world to colonize and finds familial love???\n
-        It presents an Refreshing take on the classic closed loop time travel scenario. Matthew McConaughey is simply brilliant.</string>
-    <font color="@color/colorPrimaryDark"><a href="support@legacystories.org">MORE</a></font>
 
-    <string name="rating_string_out_of">/10</string>
+    <!--movie poster base URLs-->
     <string name="movie_poster_185px_base_url">http://image.tmdb.org/t/p/w185/</string>
     <string name="movie_poster_342px_base_url">http://image.tmdb.org/t/p/w342/</string>
     <string name="movie_poster_500px_base_url">http://image.tmdb.org/t/p/w500/</string>
+
     <string name="intent_key_movie_details">MOVIE_DETAILS</string>
     <string name="sort_movie_list_key">SORT_BY</string>
 
-    <!--Play trailers-->
+    <!--Play trailers / Read reviews -->
     <string name="string_play_trailers">Watch trailers</string>
-    <string name="string_play_trailer_1">Play trailer 1</string>
-    <string name="string_play_trailer_2">Play trailer 2</string>
-    <string name="string_play_trailer_3">Play trailer 3</string>
+    <string name="string_read_reviews">Read reviews</string>
 
     <!--Menu-->
     <string name="refresh">Refresh</string>
-    <string name="menu_title_sort_by_ratings">Sort by ratings</string>
-    <string name="menu_title_sort_by_popularity">Sort by Popularity</string>
-    <string name="string_read_reviews">read reviews</string>
+    <string name="menu_title_sort_by_ratings">Top Rated</string>
+    <string name="menu_title_sort_by_popularity">Popular</string>
+    <string name="menu_title_show_favorites">Show Favorites</string>
+    <string name="menu_title_sort_by">Sort by</string>
+
+    <!--other strings-->
+    <string name="string_rating">Rating:</string>
+    <string name="rating_string_out_of">/10</string>
+
     <string name="content_description_movie_poster">Movie Poster</string>
-    <string name="movie_release_date_test">2017-05-30</string>
+    <string name="content_description_show_favorites">show favorites</string>
+    <string name="content_description_show_top_rated">show top rated</string>
+    <string name="content_description_show_popular">show popular</string>
+
     <string name="release_date_text">Release date:</string>
     <string name="string_add_to_favorites">Add to favorites</string>
     <string name="string_added_to_favorites">Movie Added to Favorites</string>
     <string name="log_message_failed_to_load_in_background">Failed to asynchronously load data.</string>
     <string name="string_removed_from_favorites">Removed from favorites</string>
 
+    <!--strings for testing-->
+    <string name="movie_title_test">Interstellar</string>
+    <string name="rating_test">8/10</string>
+    <string name="number_of_ratings_test">Average of 1020 reviews</string>
+    <string name="movie_release_date_test">2017-05-30</string>
 </resources>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_sort_bottom_menu"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <LinearLayout
+        android:id="@+id/sort_popular"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="@dimen/padding_sort_menu">
+
+        <ImageView
+            android:id="@+id/iv_sort_popular"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_sort_black_24dp"
+            android:contentDescription="@string/content_description_show_popular" />
+        <TextView
+            android:id="@+id/tv_sort_popular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/padding_start_end"
+            android:layout_marginRight="@dimen/padding_start_end"
+            android:text="@string/menu_title_sort_by_popularity"
+            android:fontFamily="sans-serif"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sort_top_rated"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="@dimen/padding_sort_menu">
+
+        <ImageView
+            android:id="@+id/iv_sort_top_rated"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_sort_black_24dp"
+            android:contentDescription="@string/content_description_show_top_rated" />
+        <TextView
+            android:id="@+id/tv_sort_top_rated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/padding_start_end"
+            android:layout_marginRight="@dimen/padding_start_end"
+            android:text="@string/menu_title_sort_by_ratings"
+            android:fontFamily="sans-serif"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sort_favorites"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="@dimen/padding_sort_menu">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_favorite_black_24dp"
+            android:contentDescription="@string/content_description_show_favorites" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/padding_start_end"
+            android:layout_marginRight="@dimen/padding_start_end"
+            android:text="@string/menu_title_show_favorites"
+            android:fontFamily="sans-serif"/>
+
+    </LinearLayout>
+
+</LinearLayout>

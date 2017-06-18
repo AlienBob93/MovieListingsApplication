@@ -4,37 +4,34 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.alien.prashantrao.popmovies.Data.MovieContract;
 import com.alien.prashantrao.popmovies.utilities.MovieItem;
 import com.alien.prashantrao.popmovies.utilities.fetchPopularMoviesTask;
 
 import java.util.ArrayList;
 
 public class MovieListActivity extends AppCompatActivity
-        implements MovieListAdapter.PopularMovieListOnClickHandler,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        implements MovieListAdapter.PopularMovieListOnClickHandler {
 
     private static final String TAG = "MovieListActivity";
 
     private RecyclerView mRecyclerView;
     public static MovieListAdapter mMovieListAdapter;
     public ProgressBar loadingIndicator;
+    private BottomSheetDialog mBottomSheetDialog;
+    private View sheetView;
 
     public static final int SORT_POPULAR = 1;
     public static final int SORT_TOP_RATED = 2;
@@ -58,12 +55,58 @@ public class MovieListActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
+        /* Setting the adapter attaches it to the RecyclerView in our layout. */
         mMovieListAdapter = new MovieListAdapter(this);
         mRecyclerView.setAdapter(mMovieListAdapter);
 
         // get the sort order last used by the user
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         mSortType = sharedPref.getInt(getString(R.string.sort_movie_list_key), SORT_POPULAR);
+
+        mBottomSheetDialog = new BottomSheetDialog(MovieListActivity.this);
+        sheetView = MovieListActivity.this.getLayoutInflater().inflate(R.layout.sort_menu, null);
+
+        /* sort the list based on the user preference and save them to the sharedPreferences
+         * file
+         */
+        sheetView.findViewById(R.id.sort_popular).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSortType = SORT_POPULAR;
+                SharedPreferences sharedPreferences = MovieListActivity.this.getPreferences(Context.MODE_PRIVATE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    v.setBackgroundColor(getColor(R.color.colorAccent));
+                } else {
+                    v.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                }
+                sharedPreferences.edit().putInt(getString(R.string.sort_movie_list_key), mSortType).apply();
+                loadMovieData(mSortType);
+            }
+        });
+
+        sheetView.findViewById(R.id.sort_top_rated).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSortType = SORT_TOP_RATED;
+                SharedPreferences sharedPreferences = MovieListActivity.this.getPreferences(Context.MODE_PRIVATE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    v.setBackgroundColor(getColor(R.color.colorAccent));
+                } else {
+                    v.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                }
+                sharedPreferences.edit().putInt(getString(R.string.sort_movie_list_key), mSortType).apply();
+                loadMovieData(mSortType);
+            }
+        });
+
+        sheetView.findViewById(R.id.sort_favorites).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFavoritesData();
+            }
+        });
+
+        mBottomSheetDialog.setContentView(sheetView);
 
         loadMovieData(mSortType);
     }
@@ -73,6 +116,16 @@ public class MovieListActivity extends AppCompatActivity
         showLoadingIndicator();
         new fetchPopularMoviesTask(this).execute(args);
         hideLoadingIndicator();
+    }
+
+    // launch the favorite movies list
+    private void loadFavoritesData() {
+        Intent startFavoritesActivity = new Intent(this, FavoritesActivity.class);
+        startActivity(startFavoritesActivity);
+    }
+
+    private void showSortMenu() {
+        mBottomSheetDialog.show();
     }
 
     public void showLoadingIndicator() {
@@ -85,73 +138,6 @@ public class MovieListActivity extends AppCompatActivity
 
     public static void setMovieListAdapter(ArrayList<MovieItem> movieItems) {
         mMovieListAdapter.setMovies(movieItems);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new AsyncTaskLoader<Cursor>(this) {
-
-            // initialize a Cursor, this will hold the movie data
-            Cursor movieData = null;
-
-            // called when the loader first starts loading data
-            @Override
-            protected void onStartLoading() {
-                if (movieData != null) {
-                    // delivers any previously loaded data immediately
-                    deliverResult(movieData);
-                } else {
-                    // force a new load
-                    forceLoad();
-                }
-            }
-
-            // loadInBackground() performs asynchronous loading of data
-            @Override
-            public Cursor loadInBackground() {
-                // query ALL the favorite movies in the background;
-                try {
-                    return getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
-                            null,
-                            null,
-                            null,
-                            null);
-                } catch (Exception e) {
-                    Log.e(TAG, getString(R.string.log_message_failed_to_load_in_background));
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-
-            // deliverResult sends the result of the load, a Cursor, to the registered listener
-            public void deliverResult(Cursor data) {
-                movieData = data;
-                super.deliverResult(data);
-            }
-        };
-    }
-
-    /**
-     * Called when a previously created loader has finished its load.
-     *
-     * @param loader The Loader that has finished.
-     * @param data The data generated by the Loader.
-     */
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-    }
-
-    /**
-     * Called when a previously created loader is being reset, and thus
-     * making its data unavailable.
-     * onLoaderReset removes any references this activity had to the loader's data.
-     *
-     * @param loader The Loader that is being reset.
-     */
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 
     // force landscape layout on orientation change
@@ -170,41 +156,16 @@ public class MovieListActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-
-        // change the sort by menu item text according to the current movie list sorting
-        MenuItem item = menu.findItem(R.id.sort_popular_top_rated);
-        if (mSortType == SORT_POPULAR) {
-            item.setTitle(getString(R.string.menu_title_sort_by_ratings));
-        } else {
-            item.setTitle(getString(R.string.menu_title_sort_by_popularity));
-        }
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
 
         switch (id) {
             case R.id.refresh:
                 // Refresh the list
                 loadMovieData(mSortType);
                 break;
-            case R.id.sort_popular_top_rated:
-                /* sort the list based on the user preference and save them to the sharedPreferences
-                   file
-                 */
-                if (mSortType == SORT_POPULAR) {
-                    mSortType = SORT_TOP_RATED;
-                    sharedPref.edit().putInt(getString(R.string.sort_movie_list_key), mSortType).apply();
-                    loadMovieData(mSortType);
-                } else {
-                    mSortType = SORT_POPULAR;
-                    sharedPref.edit().putInt(getString(R.string.sort_movie_list_key), mSortType).apply();
-                    loadMovieData(mSortType);
-                }
+            case R.id.sort_by:
+                showSortMenu();
                 break;
         }
         return true;
