@@ -13,7 +13,6 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MovieListActivity"
-            android:configChanges="orientation"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

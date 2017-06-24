@@ -2,6 +2,7 @@ package com.alien.prashantrao.popmovies.utilities;
 
 import android.net.Uri;
 
+import com.alien.prashantrao.popmovies.BuildConfig;
 import com.alien.prashantrao.popmovies.MovieListActivity;
 
 import java.io.IOException;
@@ -31,11 +32,7 @@ public class NetworkUtils {
     /**
      * API keys for TheMovieDB
      */
-    private static final String API_KEY_V3_AUTH = "b77144b94e6b57342c92073045cb7bc7";
-    public static final String API_KEY_V4_AUTH =
-            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiNzcxNDRiOTRlNmI1NzM0MmM5MjA3Mz" +
-                    "A0NWNiN2JjNyIsInN1YiI6IjU5M2RmNTExYzNhMzY4MGY2NzAyN2Y4MSIsInNjb3BlcyI6Wy" +
-                    "JhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NgqKy9m6xfQoAiUBmVFdIHafl3WM5lSbtUug8ACarb4";
+    private static final String API_KEY_V3_AUTH = BuildConfig.THEMOVIE_DB_API_KEY_V3_AUTH;
 
     // generate appropriate URLs to query Movie listing
     public static URL buildUrlForJson(int SORT_BY_ORDER) {

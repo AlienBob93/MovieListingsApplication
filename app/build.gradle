@@ -18,6 +18,10 @@ android {
         }
     }
 
+    buildTypes.each {
+        it.buildConfigField 'String', 'THEMOVIE_DB_API_KEY_V3_AUTH', THEMOVIE_DB_API_KEY_V3_AUTH
+    }
+
     dataBinding.enabled = true;
     android.defaultConfig.vectorDrawables.useSupportLibrary = true;
 }
