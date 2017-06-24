@@ -173,7 +173,8 @@ public class MovieListActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        // load the last movie list state
+        // load the last movie list state after a little delay
+        // to allow for landscape layout to load
         if (mListState != null) {
             Log.i(TAG, "mListState is not null");
             new Handler().postDelayed(new Runnable() {
