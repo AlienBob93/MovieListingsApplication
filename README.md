@@ -8,5 +8,6 @@ The application also allows marking favorites, that list is stored in a local da
 ![](https://github.com/AlienBob93/MovieListingsApplication/blob/master/MovieListingApplication%20Screenshots/screenshot_mainActivity_smudged_405px.png)        ![](https://github.com/AlienBob93/MovieListingsApplication/blob/master/MovieListingApplication%20Screenshots/screenshot_detailsActivity_smudged_405px.png)
 
 # Download
-[Initial Release (v1.0)](https://github.com/AlienBob93/MovieListingsApplication/releases)\n
+[Initial Release (v1.0)](https://github.com/AlienBob93/MovieListingsApplication/releases)
+
 [Play Store](https://play.google.com/store/apps/details?id=com.alien.prashantrao.popmovies)
