@@ -6,3 +6,6 @@ The application also allows marking favourites, that list is stored in a local d
 
 # Screenshots
 ![](https://github.com/AlienBob93/MovieListingsApplication/blob/master/MovieListingApplication%20Screenshots/screenshot_mainActivity_smudged_405px.png)        ![](https://github.com/AlienBob93/MovieListingsApplication/blob/master/MovieListingApplication%20Screenshots/screenshot_detailsActivity_smudged_405px.png)
+
+# Download
+![](https://github.com/AlienBob93/MovieListingsApplication/releases)
