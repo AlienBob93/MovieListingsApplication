@@ -7,6 +7,7 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +43,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
     private ArrayList<URL> trailerUrls, reviewUrls;
 
     private boolean isInDb;
+    private boolean isCollapsed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_movie_details);
 
         // Find the toolbar view inside the activity layout
-        this.setSupportActionBar(mBinding.movieDetailsActionBar.toolbar);
+        this.setSupportActionBar(mBinding.detailsScreenToolbar);
 
         // set the actionBar back button
         ActionBar actionBar = this.getSupportActionBar();
@@ -68,9 +70,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
                 movieItem = intentThatStartedThisActivity.getParcelableExtra(getString(R.string.intent_key_movie_details));
 
                 // set the views
-                Picasso.with(this).load(getString(R.string.movie_poster_342px_base_url)
+                Picasso.with(this).load(getString(R.string.movie_poster_500px_base_url)
                         + movieItem.getPosterPath()).resize(500, 743)
-                        .placeholder(R.drawable.ic_local_movies_black_48dp).into(mBinding.movieDetailsPosterTitle.ivDetailsScreenMoviePoster);
+                        .placeholder(R.drawable.ic_local_movies_black_48dp).into(mBinding.ivDetailsScreenMoviePoster);
+                mBinding.collapsingToolbar.setTitle(" ");
 
                 mBinding.movieDetailsPosterTitle.tvDetailsScreenMovieTitle.setText(movieItem.getTitle());
                 mBinding.movieDetailsPosterTitle.tvMovieDetailsRating.setText(valueOf(movieItem.getRatings()) + getString(rating_string_out_of));
@@ -85,12 +88,33 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
                 // check if movie is already in favorite
                 isInDb = checkIfInFavorites(movieItem);
                 Log.i(TAG, "Is in favorites: " + Boolean.toString(isInDb));
+                // change the fab fav icon based on if the movie is a favorite
+                if (isInDb) {
+                    mBinding.fabAddRemoveFavourite.setImageResource(R.drawable.ic_favorite_black_24dp);
+                } else {
+                    mBinding.fabAddRemoveFavourite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                }
             }
         }
 
         // set the onClickListeners
         mBinding.trailerReviewButtons.btWatchTrailers.setOnClickListener(this);
         mBinding.trailerReviewButtons.btReadReviews.setOnClickListener(this);
+        mBinding.fabAddRemoveFavourite.setOnClickListener(this);
+        // set an onOffsetListener to the appBar to dynamically show hide the add favourites toolbar option
+        mBinding.detailsScreenAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            // check is the toolbar is collapsed
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (verticalOffset == 0) {
+                    isCollapsed = true;
+                    invalidateOptionsMenu();
+                } else {
+                    isCollapsed = false;
+                    invalidateOptionsMenu();
+                }
+            }
+        });
     }
 
     private void loadTrailers(long movieId) {
@@ -198,7 +222,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urls.get(position).toString()));
-                    startActivity(browserIntent);
+                    // check if there is an application that can handle the required intent call
+                    if (browserIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(browserIntent);
+                    }
                 }
             });
         }
@@ -270,20 +297,31 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
                     Toast.makeText(this, "No reviews found.", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            // set the favorite icon and action to reflect the context
+            case R.id.fab_add_remove_favourite:
+                if (!isInDb) {
+                    addFavorite(movieItem);
+                    mBinding.fabAddRemoveFavourite.setImageResource(R.drawable.ic_favorite_black_24dp);
+                } else {
+                    removeFavorite(movieItem);
+                    mBinding.fabAddRemoveFavourite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                }
+                break;
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onPrepareOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.details_screen_add_favorite, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.add_remove_favorite);
+
+        // hide menu icons if the toolbar is expanded
+        if (isCollapsed) {
+            item.setVisible(false);
+        } else {
+            item.setVisible(true);
+        }
 
         // change the fav icon based on if the movie is a favorite
         if (isInDb) {
@@ -306,12 +344,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
                 return true;
             // set the favorite icon and action to reflect the context
             case R.id.add_remove_favorite:
-                if (!isInDb) {
-                    addFavorite(movieItem);
-                    item.setIcon(R.drawable.ic_favorite_white_24dp);
-                } else {
+                if (isInDb) {
                     removeFavorite(movieItem);
                     item.setIcon(R.drawable.ic_favorite_border_white_24dp);
+                } else {
+                    addFavorite(movieItem);
+                    item.setIcon(R.drawable.ic_favorite_white_24dp);
                 }
                 break;
         }

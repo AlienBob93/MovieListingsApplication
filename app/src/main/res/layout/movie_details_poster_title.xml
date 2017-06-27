@@ -7,14 +7,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <!--<ImageView
             android:id="@+id/iv_details_screen_movie_poster"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/content_description_movie_poster"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:background="@drawable/inception_poster_med"/>
+            tools:background="@drawable/inception_poster_med"/>-->
 
         <TextView
             android:id="@+id/tv_details_screen_movie_title"
@@ -24,7 +24,7 @@
             android:fontFamily="sans-serif"
             android:layout_marginStart="@dimen/padding_start_end"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/iv_details_screen_movie_poster"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             tools:text="Real Long is the Movie Name"/>
 

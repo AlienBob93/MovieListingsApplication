@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pop! Movies</string>
+    <string name="app_name">Movie Listings</string>
 
     <!--movie poster base URLs-->
     <string name="movie_poster_185px_base_url">http://image.tmdb.org/t/p/w185/</string>
