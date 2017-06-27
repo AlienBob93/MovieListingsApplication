@@ -5,4 +5,4 @@ The application uses The MovieDB APIs to pull movie details and display them in 
 The application also allows marking favourites, that list is stored in a local database that allows for easy viewing offline.
 
 # Screenshots
-![](https://github.com/AlienBob93/MovieListingsApplication/blob/master/MovieListingApplication%20Screenshots/screenshot_mainActivity_smudged_405px.png)  |  ![](https://github.com/AlienBob93/MovieListingsApplication/blob/master/MovieListingApplication%20Screenshots/screenshot_detailsActivity_smudged_405px.png)
+![](https://github.com/AlienBob93/MovieListingsApplication/blob/master/MovieListingApplication%20Screenshots/screenshot_mainActivity_smudged_405px.png)    ![](https://github.com/AlienBob93/MovieListingsApplication/blob/master/MovieListingApplication%20Screenshots/screenshot_detailsActivity_smudged_405px.png)
