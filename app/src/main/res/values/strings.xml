@@ -19,6 +19,7 @@
     <string name="menu_title_sort_by_popularity">Popular</string>
     <string name="menu_title_show_favorites">Show Favorites</string>
     <string name="menu_title_sort_by">Sort by</string>
+    <string name="menu_title_about">About</string>
 
     <!--other strings-->
     <string name="string_rating">Rating:</string>
@@ -42,4 +43,10 @@
     <string name="movie_release_date_test">2017-05-30</string>
     <string name="content_description_go_like_some_movies">Go like some movies!</string>
     <string name="movie_list_state_key">MOVIE_LIST_SATE</string>
+    
+    <!--About page-->
+    <string name="the_movie_db_attribution">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
+    <string name="content_description_the_moviedb_logo">The MovieDB Logo</string>
+    <string name="picasso_lisence">https://square.github.io/picasso/#license</string>
+    <string name="application_github_link">https://github.com/AlienBob93/MovieListingsApplication</string>
 </resources>

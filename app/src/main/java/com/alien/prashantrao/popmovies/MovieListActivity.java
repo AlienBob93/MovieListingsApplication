@@ -203,6 +203,11 @@ public class MovieListActivity extends AppCompatActivity
         int id = item.getItemId();
 
         switch (id) {
+            case R.id.about:
+                // call the about screen
+                Intent aboutScreenIntent = new Intent(this, AboutPageActivity.class);
+                startActivity(aboutScreenIntent);
+                break;
             case R.id.refresh:
                 // Refresh the list
                 loadMovieData(mSortType);

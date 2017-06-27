@@ -11,7 +11,12 @@
     <item
         android:id="@+id/refresh"
         android:title="@string/refresh"
-        android:orderInCategory="100"
         android:icon="@drawable/ic_refresh_white_24dp"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/about"
+        android:title="@string/menu_title_about"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
 </menu>
