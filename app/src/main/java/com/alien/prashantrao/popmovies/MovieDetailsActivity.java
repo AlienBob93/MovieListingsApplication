@@ -344,12 +344,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
                 return true;
             // set the favorite icon and action to reflect the context
             case R.id.add_remove_favorite:
-                if (isInDb) {
-                    removeFavorite(movieItem);
-                    item.setIcon(R.drawable.ic_favorite_border_white_24dp);
-                } else {
+                if (!isInDb) {
                     addFavorite(movieItem);
                     item.setIcon(R.drawable.ic_favorite_white_24dp);
+                } else {
+                    removeFavorite(movieItem);
+                    item.setIcon(R.drawable.ic_favorite_border_white_24dp);
                 }
                 break;
         }
